@@ -8,7 +8,7 @@ public class HandCricketUtils {
 
     public static String getNewFirstMovePlayer(String previousFirstMovePlayer,
                                                String firstPlayer, String secondPlayer) {
-        if (previousFirstMovePlayer.equals(firstPlayer)) {
+        if (isFirstPlayerMovingFirst(previousFirstMovePlayer, firstPlayer)) {
             return secondPlayer;
         }
         return firstPlayer;
