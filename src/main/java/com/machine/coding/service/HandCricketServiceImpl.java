@@ -51,10 +51,10 @@ public class HandCricketServiceImpl implements HandCricketService {
     }
 
     private int playCurrentRound(String firstMovePlayer, String firstPlayer, String secondPlayer) {
-        int ballCount = 1;
+        int throwCount = 1;
         int firstPlayerTotalScore = 0;
         int secondPlayerTotalScore = 0;
-        while (ballCount <= this.maxThrowCount) {
+        while (throwCount <= this.maxThrowCount) {
             int firstPlayerScoreForMove = scoreGenerator.generateScore();
             int secondPlayerScoreForMove = scoreGenerator.generateScore();
             if (areScoreSame(firstPlayerScoreForMove, secondPlayerScoreForMove)) {
@@ -71,17 +71,11 @@ public class HandCricketServiceImpl implements HandCricketService {
                 printScores(firstMovePlayer, firstPlayer, secondPlayer, firstPlayerScoreForMove,
                         secondPlayerScoreForMove, secondPlayerTotalScore);
             }
-            ballCount++;
+            throwCount++;
         }
         if (isFirstPlayerMovingFirst(firstMovePlayer, firstPlayer)) {
             return firstPlayerTotalScore;
         }
         return secondPlayerTotalScore;
-    }
-
-    private void printScores(String firstMovePlayer, String firstPlayer, String secondPlayer,
-                             int firstPlayerScore, int secondPlayerScore, int totalScore) {
-        System.out.println(firstPlayer + " throws " + firstPlayerScore + ", " + secondPlayer
-                + " throws " + secondPlayerScore + ". " + firstMovePlayer + " score is " + totalScore);
     }
 }

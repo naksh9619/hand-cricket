@@ -3,7 +3,7 @@ package com.machine.coding.common;
 public class HandCricketUtils {
     public static boolean firstMovePlayerIsNotOneOfThePlayers(String firstMovePlayer,
                                                               String firstPlayer, String secondPlayer) {
-        return (!firstMovePlayer.equals(firstPlayer) && firstMovePlayer.equals(secondPlayer));
+        return (!firstMovePlayer.equals(firstPlayer) && !firstMovePlayer.equals(secondPlayer));
     }
 
     public static String getNewFirstMovePlayer(String previousFirstMovePlayer,
@@ -25,5 +25,11 @@ public class HandCricketUtils {
     public static String getWinnerForMatch(String firstPlayer, String secondPlayer,
                                            int firstPlayerTotalScore, int secondPlayerTotalScore) {
         return (firstPlayerTotalScore > secondPlayerTotalScore) ? firstPlayer : secondPlayer;
+    }
+
+    public static void printScores(String firstMovePlayer, String firstPlayer, String secondPlayer,
+                             int firstPlayerScore, int secondPlayerScore, int totalScore) {
+        System.out.println(firstPlayer + " throws " + firstPlayerScore + ", " + secondPlayer
+                + " throws " + secondPlayerScore + ". " + firstMovePlayer + " score is " + totalScore);
     }
 }
