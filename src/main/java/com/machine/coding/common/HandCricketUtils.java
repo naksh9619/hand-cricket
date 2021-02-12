@@ -1,5 +1,7 @@
 package com.machine.coding.common;
 
+import com.machine.coding.entities.PlayerScore;
+
 public class HandCricketUtils {
     public static boolean firstMovePlayerIsNotOneOfThePlayers(String firstMovePlayer,
                                                               String firstPlayer, String secondPlayer) {
@@ -23,13 +25,13 @@ public class HandCricketUtils {
     }
 
     public static String getWinnerForMatch(String firstPlayer, String secondPlayer,
-                                           int firstPlayerTotalScore, int secondPlayerTotalScore) {
-        return (firstPlayerTotalScore > secondPlayerTotalScore) ? firstPlayer : secondPlayer;
+                                           PlayerScore firstPlayerTotalScore, PlayerScore secondPlayerTotalScore) {
+        return (firstPlayerTotalScore.getScore() > secondPlayerTotalScore.getScore()) ? firstPlayer : secondPlayer;
     }
 
     public static void printScores(String firstMovePlayer, String firstPlayer, String secondPlayer,
-                             int firstPlayerScore, int secondPlayerScore, int totalScore) {
+                                   int firstPlayerScore, int secondPlayerScore, PlayerScore totalScore) {
         System.out.println(firstPlayer + " throws " + firstPlayerScore + ", " + secondPlayer
-                + " throws " + secondPlayerScore + ". " + firstMovePlayer + " score is " + totalScore);
+                + " throws " + secondPlayerScore + ". " + firstMovePlayer + " score is " + totalScore.getScore());
     }
 }

@@ -1,10 +1,18 @@
 package com.machine.coding.service;
 
+import com.machine.coding.entities.PlayerScore;
 import com.machine.coding.exception.HandCricketException;
+
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static com.machine.coding.common.HandCricketUtils.*;
+import static com.machine.coding.common.HandCricketUtils.areScoreSame;
+import static com.machine.coding.common.HandCricketUtils.firstMovePlayerIsNotOneOfThePlayers;
+import static com.machine.coding.common.HandCricketUtils.getNewFirstMovePlayer;
+import static com.machine.coding.common.HandCricketUtils.getWinnerForMatch;
+import static com.machine.coding.common.HandCricketUtils.isFirstPlayerMovingFirst;
+import static com.machine.coding.common.HandCricketUtils.printScores;
 
 @Slf4j
 public class HandCricketServiceImpl implements HandCricketService {
@@ -27,33 +35,27 @@ public class HandCricketServiceImpl implements HandCricketService {
             log.error("First move player not specified correctly.");
             throw new HandCricketException("First move player not mentioned correctly.");
         }
-        int firstPlayerTotalScore = 0;
-        int secondPlayerTotalScore = 0;
+        PlayerScore firstPlayerScore = new PlayerScore();
+        PlayerScore secondPlayerScore = new PlayerScore();
         int roundCount = 1;
         while (roundCount <= this.maxRounds) {
             System.out.println("Round " + roundCount + " : " + firstMovePlayerForRound + " is batting.");
-            int scoreForRound = playCurrentRound(firstMovePlayerForRound, firstPlayer, secondPlayer);
-            if (isFirstPlayerMovingFirst(firstMovePlayerForRound, firstPlayer)) {
-                firstPlayerTotalScore += scoreForRound;
-            } else {
-                secondPlayerTotalScore += scoreForRound;
-            }
+            playCurrentRound(firstMovePlayerForRound, firstPlayer, secondPlayer, firstPlayerScore, secondPlayerScore);
             firstMovePlayerForRound = getNewFirstMovePlayer(firstMovePlayerForRound, firstPlayer, secondPlayer);
             roundCount++;
         }
-        if (areScoreSame(firstPlayerTotalScore, secondPlayerTotalScore)) {
+        if (areScoreSame(firstPlayerScore.getScore(), secondPlayerScore.getScore())) {
             System.out.println("Match Tied");
             return "TIE";
         }
-        String winner = getWinnerForMatch(firstPlayer, secondPlayer, firstPlayerTotalScore, secondPlayerTotalScore);
+        String winner = getWinnerForMatch(firstPlayer, secondPlayer, firstPlayerScore, secondPlayerScore);
         System.out.println("Game winner is: " + winner);
         return winner;
     }
 
-    private int playCurrentRound(String firstMovePlayer, String firstPlayer, String secondPlayer) {
+    private void playCurrentRound(String firstMovePlayer, String firstPlayer, String secondPlayer,
+                                  PlayerScore firstPlayerTotalScore, PlayerScore secondPlayerTotalScore) {
         int throwCount = 1;
-        int firstPlayerTotalScore = 0;
-        int secondPlayerTotalScore = 0;
         while (throwCount <= this.maxThrowCount) {
             int firstPlayerScoreForMove = scoreGenerator.generateScore();
             int secondPlayerScoreForMove = scoreGenerator.generateScore();
@@ -62,20 +64,21 @@ public class HandCricketServiceImpl implements HandCricketService {
                         + " throws " + secondPlayerScoreForMove + ". " + firstMovePlayer + " is out.");
                 break;
             }
-            firstPlayerTotalScore += firstPlayerScoreForMove;
-            secondPlayerTotalScore += secondPlayerScoreForMove;
             if (isFirstPlayerMovingFirst(firstMovePlayer, firstPlayer)) {
+                addScore(firstPlayerTotalScore, firstPlayerScoreForMove);
                 printScores(firstMovePlayer, firstPlayer, secondPlayer, firstPlayerScoreForMove,
                         secondPlayerScoreForMove, firstPlayerTotalScore);
             } else if (firstMovePlayer.equals(secondPlayer)) {
+                addScore(secondPlayerTotalScore, secondPlayerScoreForMove);
                 printScores(firstMovePlayer, firstPlayer, secondPlayer, firstPlayerScoreForMove,
                         secondPlayerScoreForMove, secondPlayerTotalScore);
             }
             throwCount++;
         }
-        if (isFirstPlayerMovingFirst(firstMovePlayer, firstPlayer)) {
-            return firstPlayerTotalScore;
-        }
-        return secondPlayerTotalScore;
+    }
+
+    private void addScore(PlayerScore playerScore, int scoreForRound) {
+        int points = playerScore.getScore();
+        playerScore.setScore(points + scoreForRound);
     }
 }

@@ -14,7 +14,7 @@ public class HandCricketMainApplication {
         int maxRounds = 2;
         int maxThrowCount = 6;
         /*
-         * Comment L14 and L15, uncomment L19 and L20 to make number of rounds
+         * Comment L14 and L15, uncomment L20 and L21 to make number of rounds
          * and number of throws configurable
          */
 //        int maxRounds = scanner.nextInt();
